@@ -1,0 +1,15 @@
+name: Custom Triggers Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  check-triggers:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show trigger info
+        run: echo "Workflow uruchomiony przez zdarzenie ${{ github.event_name }}"
