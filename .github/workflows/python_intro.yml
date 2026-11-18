@@ -1,0 +1,26 @@
+name: Python Intro Workflow
+
+on:
+  push:
+
+jobs:
+  run-python:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Create Python script
+        run: |
+          cat << 'EOF' > script.py
+          def hello():
+              print("Hello from Python function!")
+
+          if __name__ == "__main__":
+              hello()
+          EOF
+
+      - name: Run Python script
+        run: python script.py
