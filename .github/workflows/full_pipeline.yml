@@ -1,0 +1,60 @@
+name: Full CI/CD Pipeline
+
+on:
+  push:
+
+jobs:
+  lint:
+    name: Stage 1 - Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install linters and check code
+        run: |
+          pip install flake8 black
+          flake8 src/ tests/ --max-line-length=88
+          black --check src/ tests/
+
+  test:
+    name: Stage 2 - Test
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies and run pytest with coverage
+        run: |
+          pip install -r requirements.txt pytest-cov
+          pytest --cov=src
+
+  build:
+    name: Stage 3 - Build Docker Image
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -t homework-l38:latest .
+
+  deploy:
+    name: Stage 4 - Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Simulate deployment
+        run: echo "Deploying..."
