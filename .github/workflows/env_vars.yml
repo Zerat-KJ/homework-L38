@@ -1,0 +1,22 @@
+name: Environment Variables Demo
+
+on:
+  push:
+
+env:
+  GLOBAL_APP_NAME: "Homework-CI-CD"
+  GLOBAL_ENV: "staging"
+
+jobs:
+  print-variables:
+    runs-on: ubuntu-latest
+    env:
+      JOB_OWNER: "Piotr"
+      LOCAL_PORT: "8000"
+    steps:
+      - name: Display environment variables
+        run: |
+          echo "Aplikacja: $GLOBAL_APP_NAME"
+          echo "Środowisko: $GLOBAL_ENV"
+          echo "Właściciel joba: $JOB_OWNER"
+          echo "Port lokalny: $LOCAL_PORT"
